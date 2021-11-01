@@ -10,7 +10,7 @@
       </v-card>
     </v-dialog>
 
-    <v-row justify="center" align="center">
+    <v-row v-if="items.length > 0" justify="center" align="center">
       <v-col md="12">
         <v-list>
           <v-list-item-group v-model="selection">
@@ -22,11 +22,18 @@
       </v-col>
     </v-row>
 
+    <h1 v-else class="text-center mb-5">Добавьте элемент</h1>
+
     <v-row justify="center">
       <v-btn class="mr-3" color="green" @click="addItem">
         Добавить элемент
       </v-btn>
-      <v-btn class="mr-3" color="red" @click="removeItem">
+      <v-btn
+        class="mr-3"
+        :disabled="!items.length"
+        color="red"
+        @click="removeItem"
+      >
         Удалить элемент
       </v-btn>
       <v-btn color="blue" @click="toggleDialog">Количество элементов</v-btn>
@@ -38,7 +45,7 @@
 export default {
   data: function () {
     return {
-      selection: 0,
+      selection: null,
       dialog: false,
     }
   },
@@ -52,7 +59,9 @@ export default {
       this.$store.dispatch('list/addItem')
     },
     removeItem() {
+      if (this.selection === null) return
       this.$store.dispatch('list/removeItem', this.selection)
+      this.selection = null
     },
     toggleDialog() {
       this.dialog = !this.dialog

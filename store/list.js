@@ -21,6 +21,8 @@ export const actions = {
   },
 
   removeItem({ commit, state }, idx) {
+    if (!state.items.length) return
+
     const newItems = [...state.items]
     newItems.splice(idx, 1)
     commit('setItems', newItems)
